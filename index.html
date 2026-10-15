@@ -9,53 +9,82 @@
 	<style>
 		#stage {
 			position: relative;
-			width: width;
+			width: 400px;
 			height: 700px;
 			border: 1px solid #999;
 			overflow: hidden;
 			background-image: url("img/background2.png");
 			background-repeat: repeat repeat;
-			background-size: 30%;
+			background-size: 70%;
 		}
 		
 		#picture {
 			position: relative;
-			left: 70px;
+			left: 55px;
 			top: 0px;
-			width: 150px;
+			width: 135px;
 			cursor: grab;
 			touch-action: none;
 			z-index: 1
+
 		}
 		
-		#picture:active {
-			cursor: grabbing;
+		#canvas_stage {
+			position: relative;
+			top: 0px;
+			left: 0px;
+			width: 400px;
+			height: 600px;
+			z-index: 0;
 		}
 		
-		#pipe {
+		<!--
+			border: 5px solid #999;
+			background-color: #777;
 			
+		
+		
+		#ground{
+			position: absolute;
+			top: 650px;
+			left: 0px;
+			width: 400px;
+			border-top: 25px groove #090;
+			background-color: #743;
+			z-index: 1;
 		}
+		-->
 
 	</style>
 </head>
 
 <body>
     <!-- Содержимое страницы -->
+	
 	<div id="stage">
 		<img id="picture" src="img/persic.png">
+		
+		<canvas id="canvas_stage"></canvas>
+		
+		
+		
 	</div>
+		
+	
 
 </body>
 
 <script>
 const picture = document.getElementById("picture");
-console.log(picture.y);
 
-let bird, pipes, score, started, gameOver, frame;
+const canvas = document.getElementById("canvas_stage");
+const ctx = canvas.getContext("2d");
+
+let cat, pipes, score, started, gameOver, frame;
 
 function reset() {
-  bird = {y: 230, vy: 0};
-  pipes = [];
+  cat = {y: 230, vy: 0};
+  pipes = [{top:100, x:400}];
   score = 0;
   started = false;
   gameOver = false;
@@ -64,27 +93,54 @@ function reset() {
 }
 
 function action(){
-	bird.vy = -6
-	
+	if(75 < cat.y){ 
+		cat.vy = -6;
+	}
 }
 
 function draw(){
-	picture.style.top = `${bird.y}px`;
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	picture.style.top = `${cat.y-137}px`;
+	
+	ctx.fillStyle = "#777";
+	for(const p of pipes){
+		ctx.fillRect(p.x, 0, 40, 10);
+		ctx.fillStyle = "#070";
+		ctx.fillRect(p.x, 27, 40, 700);
+		
+	}
 }
 document.addEventListener("pointerdown", action);
 document.addEventListener("keydown", e => {if (e.code === "Space") {action();}});
 
+
 function update() {
-	bird.vy += 0.13
-    bird.y += bird.vy; 
-	if(bird.y > 400){action()}
+	frame++;
+	
+	if(frame % 150 === 0){
+	
+	
+	console.log(parseInt(50 + Math.random() * 600));
+	}
+
+	cat.vy += 0.13;
+    cat.y += cat.vy; 
+	if(cat.y > 650){action()}
+	
+	for(const p of pipes){
+		p.x -= 0.4;
+	}
+	
 
 	draw();
-	<!--console.log(bird.y);-->
+	<!--console.log(cat.y);-->
 	requestAnimationFrame(update);
 }
-reset()
+reset();
 update();
+
+
+
 
 
 
