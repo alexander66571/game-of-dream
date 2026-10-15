@@ -3,26 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <title>Игра Мечты</title>
 	
 	<style>
 		#stage {
-			position: relative;
-			width: 400px;
-			height: 700px;
-			border: 1px solid #999;
-			overflow: hidden;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+	
+			width: 100vw;
+			height: 100vh;
+
+
 			background-image: url("img/background2.png");
 			background-repeat: repeat repeat;
-			background-size: 70%;
+			background-size: 110%;
 		}
 		
 		#picture {
-			position: relative;
-			left: 55px;
-			top: 0px;
-			width: 135px;
+			position: absolute;
+			left: 0px;
+			width: 50vw;
+			scale: 60%;
 			cursor: grab;
 			touch-action: none;
 			z-index: 1
@@ -30,11 +33,11 @@
 		}
 		
 		#canvas_stage {
-			position: relative;
+			position: absolute;
 			top: 0px;
 			left: 0px;
-			width: 400px;
-			height: 600px;
+			width: 100vw;
+			height: 100vh;
 			z-index: 0;
 		}
 		
@@ -62,11 +65,9 @@
     <!-- Содержимое страницы -->
 	
 	<div id="stage">
+		
 		<img id="picture" src="img/persic.png">
-		
 		<canvas id="canvas_stage"></canvas>
-		
-		
 		
 	</div>
 		
@@ -82,9 +83,12 @@ const ctx = canvas.getContext("2d");
 
 let cat, pipes, score, started, gameOver, frame;
 
+var vw = window.screen.width;
+var vh = window.screen.height;
+
 function reset() {
   cat = {y: 230, vy: 0};
-  pipes = [{top:100, x:400}];
+  pipes = [{top:10, x:400}];
   score = 0;
   started = false;
   gameOver = false;
@@ -94,19 +98,20 @@ function reset() {
 
 function action(){
 	if(75 < cat.y){ 
-		cat.vy = -6;
+		cat.vy = -4;
 	}
 }
 
 function draw(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	picture.style.top = `${cat.y-137}px`;
+	picture.style.top = `${cat.y-109}px`;
 	
-	ctx.fillStyle = "#777";
+	
 	for(const p of pipes){
-		ctx.fillRect(p.x, 0, 40, 10);
+		ctx.fillStyle = "#777";
+		ctx.fillRect(p.x, 0, canvas.width*0.1, p.top);
 		ctx.fillStyle = "#070";
-		ctx.fillRect(p.x, 27, 40, 700);
+		ctx.fillRect(p.x, p.top+canvas.height*0.35   , canvas.width*0.1, canvas.height-p.top-canvas.height*0.35);
 		
 	}
 }
@@ -117,18 +122,21 @@ document.addEventListener("keydown", e => {if (e.code === "Space") {action();}})
 function update() {
 	frame++;
 	
-	if(frame % 150 === 0){
+	if(frame % 250 === 0){
 	
 	
-	console.log(parseInt(50 + Math.random() * 600));
+	var top = parseInt(canvas.height*0.1 + Math.random() * 0.4*canvas.height);
+	<!--console.log(top);-->
+	pipes.push({top:top, x:vw});
+	
 	}
 
-	cat.vy += 0.13;
+	cat.vy += 0.10;
     cat.y += cat.vy; 
-	if(cat.y > 650){action()}
+	if(cat.y > 0.80*vh){action()}
 	
 	for(const p of pipes){
-		p.x -= 0.4;
+		p.x -= 0.7;
 	}
 	
 
