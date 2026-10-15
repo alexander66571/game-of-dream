@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра Мечты</title>
+	
+	<style>
+		#stage {
+			position: relative;
+			width: width;
+			height: 700px;
+			border: 1px solid #999;
+			overflow: hidden;
+			background-image: url("background2.png");
+			background-repeat: repeat repeat;
+			background-size: 30%;
+		}
+		
+		#picture {
+			position: relative;
+			left: 70px;
+			top: 0px;
+			width: 150px;
+			cursor: grab;
+			touch-action: none;
+			z-index: 1
+		}
+		
+		#picture:active {
+			cursor: grabbing;
+		}
+		
+		#pipe {
+			
+		}
+
+	</style>
+</head>
+
+<body>
+    <!-- Содержимое страницы -->
+	<div id="stage">
+		<img id="picture" src="persic.png">
+	</div>
+
+</body>
+
+<script>
+const picture = document.getElementById("picture");
+console.log(picture.y);
+
+let bird, pipes, score, started, gameOver, frame;
+
+function reset() {
+  bird = {y: 230, vy: 0};
+  pipes = [];
+  score = 0;
+  started = false;
+  gameOver = false;
+  frame = 0;
+  draw();
+}
+
+function action(){
+	bird.vy = -6
+	
+}
+
+function draw(){
+	picture.style.top = `${bird.y}px`;
+}
+
+document.addEventListener("keydown", 	
+	e => {if (e.code === "Space") {action();}}
+);
+
+function update() {
+	bird.vy += 0.13
+    bird.y += bird.vy; 
+	if(bird.y > 400){action()}
+
+	draw();
+	console.log(bird.y);
+	requestAnimationFrame(update);
+}
+reset()
+update();
+
+
+
+</script>
+
+</html>
