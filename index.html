@@ -71,10 +71,8 @@ function action(){
 function draw(){
 	picture.style.top = `${bird.y}px`;
 }
-
-document.addEventListener("keydown", 	
-	e => {if (e.code === "Space") {action();}}
-);
+document.addEventListener("pointerdown", action);
+document.addEventListener("keydown", e => {if (e.code === "Space") {action();}});
 
 function update() {
 	bird.vy += 0.13
